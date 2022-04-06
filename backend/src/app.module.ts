@@ -4,9 +4,13 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from './config/database.config';
+import { validationSchema } from './validations/config.validation';
 
 @Module({
-  imports: [ConfigModule.forRoot(), TypeOrmModule.forRootAsync(databaseConfig)],
+  imports: [
+    ConfigModule.forRoot({ validationSchema }),
+    TypeOrmModule.forRootAsync(databaseConfig),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
