@@ -11,6 +11,8 @@ import Head from "next/head";
 import React, { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
+import { BaseLayout } from "../components/layout/Base";
+
 const client = new QueryClient();
 
 const App: React.FC<AppProps> = ({ Component, pageProps }): JSX.Element => {
@@ -39,7 +41,9 @@ const App: React.FC<AppProps> = ({ Component, pageProps }): JSX.Element => {
             withNormalizeCSS
             theme={theme(colorScheme)}
           >
-            <Component {...pageProps} />
+            <BaseLayout>
+              <Component {...pageProps} />
+            </BaseLayout>
           </MantineProvider>
         </ColorSchemeProvider>
       </QueryClientProvider>
