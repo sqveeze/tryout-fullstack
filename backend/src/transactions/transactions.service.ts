@@ -2,20 +2,34 @@ import { Injectable } from '@nestjs/common';
 import { CalculateCommissionDto } from './dto/calculate-commission.dto';
 import { ExchangeRateService } from '../exchange-rate/exchange-rate.service';
 import { ECurrency } from '@types';
+import { FindManyOptions, Repository, Between } from 'typeorm';
+import { Transaction } from './entities/transaction.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import * as moment from 'moment';
 
 @Injectable()
 export class TransactionsService {
   public constructor(
+    @InjectRepository(Transaction)
+    private readonly transactionsRepository: Repository<Transaction>,
     private readonly exchangeRateService: ExchangeRateService,
   ) {}
 
-  private static getCommission(
+  public async findAll(options?: FindManyOptions): Promise<Transaction[]> {
+    return await this.transactionsRepository.find(options);
+  }
+
+  public async create(transaction: Transaction): Promise<Transaction> {
+    return await this.transactionsRepository.save(transaction);
+  }
+
+  private async getCommission(
     calculateCommissionDto: CalculateCommissionDto,
-  ): number[] {
+  ): Promise<number[]> {
     // Assume this comes from DB
     const discountedClients = [42];
 
-    const defaultCommission = calculateCommissionDto.amount * 0.05;
+    const defaultCommission = calculateCommissionDto.amount * 0.005;
 
     const discountedClient = discountedClients.includes(
       calculateCommissionDto.client_id,
@@ -23,12 +37,29 @@ export class TransactionsService {
       ? 0.05
       : null;
 
-    // TODO
-    const highTurnoverDiscount = 0.05;
+    // get all previous transactions of a client
+    const clientTransactions = await this.findAll({
+      where: {
+        client_id: calculateCommissionDto.client_id,
+        date: Between(
+          moment(calculateCommissionDto.date).startOf('month'),
+          moment(calculateCommissionDto.date).endOf('month'),
+        ),
+      },
+      take: 0, // all
+      select: ['amount'],
+    });
 
-    const result = [defaultCommission, highTurnoverDiscount];
+    // check if client has transactions valued over 1000 in current month
+    const highTurnoverDiscount =
+      clientTransactions.reduce((acc, curr) => acc + +curr.amount, 0) > 1000
+        ? 0.03
+        : null;
+
+    const result = [defaultCommission > 0.05 ? defaultCommission : 0.05];
 
     if (discountedClient) result.push(discountedClient);
+    if (highTurnoverDiscount) result.push(highTurnoverDiscount);
 
     return result;
   }
@@ -61,14 +92,22 @@ export class TransactionsService {
       calculateCommissionDto,
     );
 
-    const commissions = TransactionsService.getCommission(
-      getConvertedTransaction,
-    );
+    const commissions = await this.getCommission(getConvertedTransaction);
 
     const lowestCommissionToApply = commissions.sort((a, b) => a - b)[0];
 
+    // Create a new transaction
+    const transaction = new Transaction();
+    transaction.date = moment(calculateCommissionDto.date).toDate();
+    transaction.amount = calculateCommissionDto.amount;
+    transaction.currency = calculateCommissionDto.currency;
+    transaction.client_id = calculateCommissionDto.client_id;
+
+    // Save the transaction
+    await this.create(transaction);
+
     return {
-      amount: lowestCommissionToApply,
+      amount: +lowestCommissionToApply.toFixed(2),
       currency: getConvertedTransaction.currency,
     };
   }
