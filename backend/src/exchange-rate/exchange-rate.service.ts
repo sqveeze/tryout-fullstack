@@ -14,6 +14,14 @@ export class ExchangeRateService {
     currency: ECurrency = ECurrency.EUR,
     amount = 1,
   ): Promise<IExchangeRateResponse> {
+    this.logger.verbose(
+      `Getting exchange rate with data: ${JSON.stringify(
+        { date, currency, amount },
+        null,
+        2,
+      )}`,
+    );
+
     const isValid = moment(date, 'YYYY-MM-DD', true).isValid();
 
     if (!isValid) {
