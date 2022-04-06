@@ -6,6 +6,7 @@ import {
   ColorSchemeProvider,
   MantineProvider,
 } from "@mantine/core";
+import { NotificationsProvider } from "@mantine/notifications";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import React, { useState } from "react";
@@ -41,9 +42,11 @@ const App: React.FC<AppProps> = ({ Component, pageProps }): JSX.Element => {
             withNormalizeCSS
             theme={theme(colorScheme)}
           >
-            <BaseLayout>
-              <Component {...pageProps} />
-            </BaseLayout>
+            <NotificationsProvider>
+              <BaseLayout>
+                <Component {...pageProps} />
+              </BaseLayout>
+            </NotificationsProvider>
           </MantineProvider>
         </ColorSchemeProvider>
       </QueryClientProvider>
