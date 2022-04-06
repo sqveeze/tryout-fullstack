@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import * as moment from 'moment';
-import { ECurrency } from '@types';
+import { ECurrency, IExchangeRateResponse } from '@types';
 
 @Injectable()
 export class ExchangeRateService {
@@ -9,11 +9,11 @@ export class ExchangeRateService {
 
   public constructor(private readonly exchangeRateApiService: HttpService) {}
 
-  // Normally I would write types for this but for this homework I will just use any.
   public async getExchangeRate(
     date: string = moment().format('YYYY-MM-DD'),
     currency: ECurrency = ECurrency.EUR,
-  ): Promise<any> {
+    amount = 1,
+  ): Promise<IExchangeRateResponse> {
     const isValid = moment(date, 'YYYY-MM-DD', true).isValid();
 
     if (!isValid) {
@@ -25,11 +25,11 @@ export class ExchangeRateService {
 
     try {
       // toPromise is deprecated but for this homework it's faster to use it than handling rx observables.
-      // Normally I would write types for this but for this homework I will just use any.
       const { data } = await this.exchangeRateApiService
-        .get<any>(date, {
+        .get<IExchangeRateResponse>(date, {
           params: {
-            currency,
+            base: currency,
+            amount,
           },
         })
         .toPromise();
