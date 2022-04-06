@@ -55,7 +55,7 @@ export class TransactionsService {
 
     // check if client has transactions valued over 1000 in current month
     const highTurnoverDiscount =
-      clientTransactions.reduce((acc, curr) => acc + +curr.amount, 0) > 1000
+      clientTransactions.reduce((acc, curr) => acc + +curr.amount, 0) >= 1000
         ? 0.03
         : null;
 
@@ -98,10 +98,10 @@ export class TransactionsService {
 
     // Create a new transaction
     const transaction = new Transaction();
-    transaction.date = moment(calculateCommissionDto.date).toDate();
-    transaction.amount = calculateCommissionDto.amount;
-    transaction.currency = calculateCommissionDto.currency;
-    transaction.client_id = calculateCommissionDto.client_id;
+    transaction.date = moment(getConvertedTransaction.date).toDate();
+    transaction.amount = +getConvertedTransaction.amount.toFixed(2);
+    transaction.currency = getConvertedTransaction.currency;
+    transaction.client_id = getConvertedTransaction.client_id;
 
     // Save the transaction
     await this.create(transaction);
