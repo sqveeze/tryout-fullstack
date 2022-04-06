@@ -1,4 +1,5 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsEnum, IsNotEmpty } from 'class-validator';
+import { ECurrency } from '@types';
 
 export class CalculateCommissionDto {
   @IsNotEmpty({
@@ -14,7 +15,10 @@ export class CalculateCommissionDto {
   @IsNotEmpty({
     message: 'ERROR.TRANSACTIONS.CALCULATE_COMMISSION.CURRENCY_IS_REQUIRED',
   })
-  public readonly currency: string;
+  @IsEnum(ECurrency, {
+    message: 'ERROR.TRANSACTIONS.CALCULATE_COMMISSION.INVALID_CURRENCY',
+  })
+  public readonly currency: ECurrency;
 
   @IsNotEmpty({ message: 'ERROR.TRANSACTIONS.CLIENT_ID_IS_REQUIRED' })
   public readonly client_id: number;
