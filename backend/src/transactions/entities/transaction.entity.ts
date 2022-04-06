@@ -7,9 +7,9 @@ export class Transaction extends BaseEntity {
   public readonly id: number;
 
   @Column()
-  public date: string;
+  public date: Date;
 
-  @Column()
+  @Column({ type: 'decimal', scale: 2 })
   public amount: number;
 
   @Column({
