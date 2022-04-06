@@ -1,7 +1,7 @@
 import Head from "next/head";
 import React from "react";
 
-import { CommissionCalculator } from "../components/pages/home/CommissionCalculator";
+import { CommissionCalculator } from "../components";
 
 export const HomeView: React.FC = (): JSX.Element => {
   return (

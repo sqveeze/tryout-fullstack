@@ -12,7 +12,7 @@ import Head from "next/head";
 import React, { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import { BaseLayout } from "../components/layout/Base";
+import { BaseLayout } from "../components";
 
 const client = new QueryClient();
 
