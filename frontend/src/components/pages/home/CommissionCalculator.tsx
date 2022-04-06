@@ -2,15 +2,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, NumberInput, Select, TextInput, Title } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
 import { useNotifications } from "@mantine/notifications";
+import { ECurrency, ICalculationResponse } from "@types";
+import { apiClient, V1_CALCULATE_COMMISSION } from "@utils";
 import moment from "moment";
 import { useRouter } from "next/router";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import * as Yup from "yup";
-
-import { V1_CALCULATE_COMMISSION } from "../../../utils/constants";
-import { apiClient } from "../../../utils/networking";
 
 interface ICommissionCalculatorData {
   date: Date;
@@ -40,7 +39,7 @@ export const CommissionCalculator: React.FC = (): JSX.Element => {
           client_id: +client_id,
         },
       })
-      .json<any>();
+      .json<ICalculationResponse>();
   });
 
   const validationSchema = Yup.object({
@@ -49,7 +48,7 @@ export const CommissionCalculator: React.FC = (): JSX.Element => {
       .required("Amount is required")
       .min(1, "Amount must be greater than 0"),
     currency: Yup.string()
-      .oneOf(["EUR", "USD", "HUF"])
+      .oneOf([ECurrency.EUR, ECurrency.HUF, ECurrency.USD])
       .required("Please select a currency"),
     client_id: Yup.string().required("Client id is required"),
   }).required();
