@@ -4,7 +4,7 @@ export class CalculateCommissionDto {
   @IsNotEmpty({
     message: 'ERROR.TRANSACTIONS.CALCULATE_COMMISSION.DATE_IS_REQUIRED',
   })
-  public readonly date: Date;
+  public readonly date: string;
 
   @IsNotEmpty({
     message: 'ERROR.TRANSACTIONS.CALCULATE_COMMISSION.AMOUNT_IS_REQUIRED',
