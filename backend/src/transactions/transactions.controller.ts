@@ -9,7 +9,7 @@ import { CalculateCommissionDto } from './dto/calculate-commission.dto';
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
-  @Post()
+  @Post('calculate-commission')
   public async calculateCommission(
     @Body() calculateCommissionDto: CalculateCommissionDto,
   ) {
