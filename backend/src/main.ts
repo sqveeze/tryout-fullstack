@@ -4,13 +4,19 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
   );
+
+  app.enableVersioning({ type: VersioningType.URI });
+  app.enableCors();
+
+  app.setGlobalPrefix('api');
+  app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(process.env.PORT, process.env.HOST);
 }
