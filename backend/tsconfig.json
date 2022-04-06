@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "paths": {
+      "@config": ["./src/config"],
+      "@types": ["./src/types"]
+    },
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
