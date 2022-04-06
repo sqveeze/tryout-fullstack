@@ -9,6 +9,9 @@ import {
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import React, { useState } from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const client = new QueryClient();
 
 const App: React.FC<AppProps> = ({ Component, pageProps }): JSX.Element => {
   const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
@@ -26,18 +29,20 @@ const App: React.FC<AppProps> = ({ Component, pageProps }): JSX.Element => {
         />
       </Head>
 
-      <ColorSchemeProvider
-        colorScheme={colorScheme}
-        toggleColorScheme={toggleColorScheme}
-      >
-        <MantineProvider
-          withGlobalStyles
-          withNormalizeCSS
-          theme={theme(colorScheme)}
+      <QueryClientProvider client={client}>
+        <ColorSchemeProvider
+          colorScheme={colorScheme}
+          toggleColorScheme={toggleColorScheme}
         >
-          <Component {...pageProps} />
-        </MantineProvider>
-      </ColorSchemeProvider>
+          <MantineProvider
+            withGlobalStyles
+            withNormalizeCSS
+            theme={theme(colorScheme)}
+          >
+            <Component {...pageProps} />
+          </MantineProvider>
+        </ColorSchemeProvider>
+      </QueryClientProvider>
     </>
   );
 };
