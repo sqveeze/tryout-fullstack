@@ -6,10 +6,4 @@ export const validationSchema: Joi.ObjectSchema = Joi.object({
     .default('development'),
   HOST: Joi.string().default('0.0.0.0'),
   PORT: Joi.number().default(3000),
-  DATABASE_HOST: Joi.string().required(),
-  DATABASE_PORT: Joi.number().required(),
-  DATABASE_USERNAME: Joi.string().required(),
-  // Empty needed because pg in localhost has no password.
-  DATABASE_PASSWORD: Joi.string().allow(''),
-  DATABASE_NAME: Joi.string().required(),
 });
