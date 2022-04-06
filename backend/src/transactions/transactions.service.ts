@@ -29,7 +29,10 @@ export class TransactionsService {
     // Assume this comes from DB
     const discountedClients = [42];
 
-    const defaultCommission = calculateCommissionDto.amount * 0.005;
+    const defaultCommission =
+      calculateCommissionDto.amount * 0.005 > 0.05
+        ? calculateCommissionDto.amount * 0.005
+        : 0.05;
 
     const discountedClient = discountedClients.includes(
       calculateCommissionDto.client_id,
@@ -56,12 +59,9 @@ export class TransactionsService {
         ? 0.03
         : null;
 
-    const result = [defaultCommission > 0.05 ? defaultCommission : 0.05];
-
-    if (discountedClient) result.push(discountedClient);
-    if (highTurnoverDiscount) result.push(highTurnoverDiscount);
-
-    return result;
+    return [defaultCommission, discountedClient, highTurnoverDiscount].filter(
+      (rule) => rule,
+    );
   }
 
   private async convertTransactionToEur(
