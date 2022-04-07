@@ -1,5 +1,4 @@
 import axios from "axios";
-import ky from "ky";
 
 import { API_BASE_URL } from "./constants";
 
