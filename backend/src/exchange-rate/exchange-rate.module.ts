@@ -1,7 +1,8 @@
-import { Module } from '@nestjs/common';
-import { ExchangeRateService } from './exchange-rate.service';
+import { exchangeApiConfig } from '@config';
 import { HttpModule } from '@nestjs/axios';
-import { exchangeApiConfig } from '../config/exchange-api.config';
+import { Module } from '@nestjs/common';
+
+import { ExchangeRateService } from './exchange-rate.service';
 
 @Module({
   imports: [HttpModule.registerAsync(exchangeApiConfig)],

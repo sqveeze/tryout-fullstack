@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CalculateCommissionDto } from './dto/calculate-commission.dto';
-import { ExchangeRateService } from '../exchange-rate/exchange-rate.service';
-import { ECurrency } from '@types';
-import { FindManyOptions, Repository, Between } from 'typeorm';
-import { Transaction } from './entities/transaction.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ECurrency } from '@types';
 import * as moment from 'moment';
+import { Between, FindManyOptions, Repository } from 'typeorm';
+
+import { ExchangeRateService } from '../exchange-rate/exchange-rate.service';
+import { CalculateCommissionDto } from './dto/calculate-commission.dto';
+import { Transaction } from './entities/transaction.entity';
 
 @Injectable()
 export class TransactionsService {

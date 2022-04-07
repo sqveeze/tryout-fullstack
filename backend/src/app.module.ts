@@ -1,10 +1,11 @@
+import { databaseConfig } from '@config';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { validationSchema } from '@validations';
-import { TransactionsModule } from './transactions/transactions.module';
-import { ExchangeRateModule } from './exchange-rate/exchange-rate.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { databaseConfig } from '@config';
+import { validationSchema } from '@validations';
+
+import { ExchangeRateModule } from './exchange-rate/exchange-rate.module';
+import { TransactionsModule } from './transactions/transactions.module';
 
 @Module({
   imports: [

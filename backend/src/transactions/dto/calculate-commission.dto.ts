@@ -1,5 +1,5 @@
-import { IsEnum, IsNotEmpty } from 'class-validator';
 import { ECurrency } from '@types';
+import { IsEnum, IsNotEmpty } from 'class-validator';
 
 export class CalculateCommissionDto {
   @IsNotEmpty({

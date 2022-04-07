@@ -1,6 +1,7 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import { TransactionsService } from './transactions.service';
+import { Body, Controller, Post } from '@nestjs/common';
+
 import { CalculateCommissionDto } from './dto/calculate-commission.dto';
+import { TransactionsService } from './transactions.service';
 
 @Controller({
   path: 'transactions',

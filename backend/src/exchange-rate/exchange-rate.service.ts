@@ -1,7 +1,7 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import * as moment from 'moment';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ECurrency, IExchangeRateResponse } from '@types';
+import * as moment from 'moment';
 
 @Injectable()
 export class ExchangeRateService {
