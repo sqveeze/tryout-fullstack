@@ -385,6 +385,11 @@
   dependencies:
     ajv "^6.12.6"
 
+"@golevelup/ts-jest@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@golevelup/ts-jest/-/ts-jest-0.3.2.tgz#ea199827fb77cd52a0d013796460ce884f0fe7ec"
+  integrity sha512-hv+j/vau2oj5CuhY1CrTs48Qu+ZVXpm/56OzKcL2KVN8+yc0ZIMbvTIld1wbrT1RrvAuwfDmUM2s3aSy7veuwg==
+
 "@hapi/hoek@^9.0.0":
   version "9.2.1"
   resolved "https://registry.npmjs.org/@hapi/hoek/-/hoek-9.2.1.tgz"
@@ -724,7 +729,7 @@
 
 "@nestjs/testing@^8.4.3":
   version "8.4.3"
-  resolved "https://registry.npmjs.org/@nestjs/testing/-/testing-8.4.3.tgz"
+  resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-8.4.3.tgz#2d2aa522fecb75ae9080a1abd572eb648c9c05c6"
   integrity sha512-6+b2UCObr5onv7TG398VUdkNeU9n+f+TeTvlzmZlp9LKIAS4ZxDxwpdLDl5m/AssdkaZpfb0u755BJfKP5wbNw==
   dependencies:
     optional "0.1.4"
@@ -2238,6 +2243,11 @@ eslint-plugin-prettier@^4.0.0:
   integrity sha512-98MqmCJ7vJodoQK359bqQWaxOE0CS8paAz/GgjaZLyex4TTk3g9HugoO89EqWCrFiOqn9EVvcoo7gZzONCWVwQ==
   dependencies:
     prettier-linter-helpers "^1.0.0"
+
+eslint-plugin-simple-import-sort@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-simple-import-sort/-/eslint-plugin-simple-import-sort-7.0.0.tgz#a1dad262f46d2184a90095a60c66fef74727f0f8"
+  integrity sha512-U3vEDB5zhYPNfxT5TYR7u01dboFZp+HNpnGhkDB2g/2E4wZ/g1Q9Ton8UwCLfRV9yAKyYqDh62oHOamvkFxsvw==
 
 eslint-scope@5.1.1, eslint-scope@^5.1.1:
   version "5.1.1"
