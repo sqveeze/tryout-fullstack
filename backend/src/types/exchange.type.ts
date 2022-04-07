@@ -11,5 +11,5 @@ export interface IExchangeRateResponse {
   historical: boolean;
   base: ECurrency;
   date: string;
-  rates: Array<ECurrency>;
+  rates: Record<ECurrency, number>;
 }
