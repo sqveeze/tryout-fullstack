@@ -18,6 +18,9 @@ export const databaseConfig: TypeOrmModuleAsyncOptions = {
       autoLoadEntities: true,
       // This should be never used even in development and should write proper migrations for db schema change
       synchronize: true,
+      // This is used to avoid error when running tests
+      // In a real application a separate DB should be used for testing, for ex: sqlite which can be easy to use in CI too when running test on CI
+      dropSchema: isTest,
     };
 
     return {
