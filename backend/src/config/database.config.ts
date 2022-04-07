@@ -8,10 +8,13 @@ export const databaseConfig: TypeOrmModuleAsyncOptions = {
     const isDevelopment =
       configService.get<string>('NODE_ENV') === 'development';
 
+    const isTest = configService.get<string>('NODE_ENV') === 'test';
+
     const baseOpts = {
-      ...(!isDevelopment && {
-        ssl: { rejectUnauthorized: false },
-      }),
+      ...(!isDevelopment &&
+        !isTest && {
+          ssl: { rejectUnauthorized: false },
+        }),
       autoLoadEntities: true,
       // This should be never used even in development and should write proper migrations for db schema change
       synchronize: true,
@@ -20,7 +23,7 @@ export const databaseConfig: TypeOrmModuleAsyncOptions = {
     return {
       type: 'postgres',
       ...baseOpts,
-      ...(isDevelopment
+      ...(isDevelopment || isTest
         ? {
             // In development we use separated db env vars
             host: configService.get<string>('DATABASE_HOST'),
