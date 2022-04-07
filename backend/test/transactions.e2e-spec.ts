@@ -6,10 +6,8 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import { MockType } from '@types';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { validationSchema } from '@validations';
-import { EntityRepository, Repository } from 'typeorm';
 
 import { ExchangeRateModule } from '../src/exchange-rate/exchange-rate.module';
 import { Transaction } from '../src/transactions/entities/transaction.entity';
