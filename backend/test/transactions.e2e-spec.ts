@@ -1,3 +1,4 @@
+import { databaseConfig } from '@config';
 import { VersioningType } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import {
@@ -5,10 +6,10 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { MockType } from '@types';
 import { validationSchema } from '@validations';
-import { Repository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 
 import { ExchangeRateModule } from '../src/exchange-rate/exchange-rate.module';
 import { Transaction } from '../src/transactions/entities/transaction.entity';
@@ -16,6 +17,7 @@ import { TransactionsController } from '../src/transactions/transactions.control
 import { TransactionsService } from '../src/transactions/transactions.service';
 
 let app: NestFastifyApplication;
+let repo: Repository<Transaction>;
 
 export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(
   () => ({
@@ -25,20 +27,19 @@ export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(
   }),
 );
 
+@EntityRepository(Transaction)
+export class TransactionRepository extends Repository<Transaction> {}
+
 beforeAll(async () => {
   const module: TestingModule = await Test.createTestingModule({
     imports: [
-      ExchangeRateModule,
       ConfigModule.forRoot({ validationSchema: validationSchema }),
+      TypeOrmModule.forRootAsync(databaseConfig),
+      TypeOrmModule.forFeature([Transaction]),
+      ExchangeRateModule,
     ],
     controllers: [TransactionsController],
-    providers: [
-      TransactionsService,
-      {
-        provide: getRepositoryToken(Transaction),
-        useFactory: repositoryMockFactory,
-      },
-    ],
+    providers: [TransactionsService],
   }).compile();
 
   app = module.createNestApplication<NestFastifyApplication>(
@@ -102,13 +103,45 @@ it(`/POST calculate-commission discounted client`, () => {
         date: '2022-04-05',
         amount: 500,
         currency: 'USD',
-        client_id: 2,
+        client_id: 42,
       },
     })
     .then((result) => {
       expect(result.statusCode).toEqual(201);
       expect(JSON.parse(result.payload)).toEqual({
-        amount: 2.29,
+        amount: 0.05,
+        currency: 'EUR',
+      });
+    });
+});
+
+it(`/POST calculate-commission high turnover`, async () => {
+  await app.inject({
+    method: 'POST',
+    url: 'api/v1/transactions/calculate-commission',
+    payload: {
+      date: '2022-04-05',
+      amount: 1500,
+      currency: 'USD',
+      client_id: 100,
+    },
+  });
+
+  return app
+    .inject({
+      method: 'POST',
+      url: 'api/v1/transactions/calculate-commission',
+      payload: {
+        date: '2022-04-05',
+        amount: 999,
+        currency: 'USD',
+        client_id: 100,
+      },
+    })
+    .then((result) => {
+      expect(result.statusCode).toEqual(201);
+      expect(JSON.parse(result.payload)).toEqual({
+        amount: 0.03,
         currency: 'EUR',
       });
     });
