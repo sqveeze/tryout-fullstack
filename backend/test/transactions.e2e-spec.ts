@@ -17,18 +17,6 @@ import { TransactionsController } from '../src/transactions/transactions.control
 import { TransactionsService } from '../src/transactions/transactions.service';
 
 let app: NestFastifyApplication;
-let repo: Repository<Transaction>;
-
-export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(
-  () => ({
-    findOne: jest.fn((entity) => entity),
-    find: jest.fn((entity) => [entity]),
-    save: jest.fn((entity) => entity),
-  }),
-);
-
-@EntityRepository(Transaction)
-export class TransactionRepository extends Repository<Transaction> {}
 
 beforeAll(async () => {
   const module: TestingModule = await Test.createTestingModule({
