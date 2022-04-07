@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, NumberInput, Select, TextInput, Title } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
-import { useNotifications } from "@mantine/notifications";
+import { showNotification } from "@mantine/notifications";
 import { ECurrency, ICalculationResponse } from "@types";
 import { apiClient, V1_CALCULATE_COMMISSION } from "@utils";
 import moment from "moment";
@@ -20,7 +20,6 @@ interface ICommissionCalculatorData {
 
 export const CommissionCalculator: React.FC = (): JSX.Element => {
   const router = useRouter();
-  const notification = useNotifications();
 
   const {
     mutateAsync: calculateCommission,
@@ -30,16 +29,17 @@ export const CommissionCalculator: React.FC = (): JSX.Element => {
 
     const formatDate = moment(date).format("YYYY-MM-DD");
 
-    return await apiClient
-      .post(V1_CALCULATE_COMMISSION, {
-        json: {
-          date: formatDate,
-          amount,
-          currency,
-          client_id: +client_id,
-        },
-      })
-      .json<ICalculationResponse>();
+    const { data } = await apiClient.post<ICalculationResponse>(
+      V1_CALCULATE_COMMISSION,
+      {
+        date: formatDate,
+        amount,
+        currency,
+        client_id: +client_id,
+      }
+    );
+
+    return data;
   });
 
   const validationSchema = Yup.object({
@@ -74,7 +74,7 @@ export const CommissionCalculator: React.FC = (): JSX.Element => {
     try {
       const result = await calculateCommission(data);
 
-      notification.showNotification({
+      showNotification({
         title: "🤑 Success",
         message:
           "Commission calculation successful, redirecting to result page...",
@@ -90,7 +90,7 @@ export const CommissionCalculator: React.FC = (): JSX.Element => {
         },
       });
     } catch (error) {
-      notification.showNotification({
+      showNotification({
         title: "🚨 Error",
         message: "Something went wrong, please try again",
         color: "red",
@@ -102,7 +102,9 @@ export const CommissionCalculator: React.FC = (): JSX.Element => {
     <>
       <div className="row g-4 align-items-center">
         <div className="col-12">
-          <Title order={2}>Commission Calculator</Title>
+          <Title data-testid="calculator-title" order={2}>
+            Commission Calculator
+          </Title>
         </div>
         <div className="col-12">
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -117,6 +119,7 @@ export const CommissionCalculator: React.FC = (): JSX.Element => {
                       onBlur={onBlur}
                       value={value}
                       label="Date"
+                      data-testid="calculator-date"
                     />
                   )}
                   name="date"
@@ -134,6 +137,7 @@ export const CommissionCalculator: React.FC = (): JSX.Element => {
                       label="Amount"
                       precision={2}
                       min={1}
+                      data-testid="calculator-amount"
                     />
                   )}
                   name="amount"
@@ -154,6 +158,7 @@ export const CommissionCalculator: React.FC = (): JSX.Element => {
                         { value: "EUR", label: "EUR" },
                         { value: "HUF", label: "HUF" },
                       ]}
+                      data-testid="calculator-currency"
                     />
                   )}
                   name="currency"
@@ -169,13 +174,18 @@ export const CommissionCalculator: React.FC = (): JSX.Element => {
                       value={value}
                       onBlur={onBlur}
                       label="Client Id"
+                      data-testid="calculator-client-id"
                     />
                   )}
                   name="client_id"
                 />
               </div>
               <div className="col-12">
-                <Button type="submit" loading={isCalculateCommissionLoading}>
+                <Button
+                  data-testid="calculator-button"
+                  type="submit"
+                  loading={isCalculateCommissionLoading}
+                >
                   Submit
                 </Button>
               </div>

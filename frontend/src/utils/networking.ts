@@ -1,7 +1,8 @@
+import axios from "axios";
 import ky from "ky";
 
 import { API_BASE_URL } from "./constants";
 
-export const apiClient = ky.extend({
-  prefixUrl: API_BASE_URL,
+export const apiClient = axios.create({
+  baseURL: API_BASE_URL,
 });
