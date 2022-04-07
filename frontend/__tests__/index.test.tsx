@@ -16,33 +16,15 @@ describe("Home", () => {
 
     expect(title).toBeInTheDocument();
   });
-  it("renders the input elements", () => {
+  it("renders the form", () => {
     render(
       <TestWrapper>
         <Home />
       </TestWrapper>
     );
 
-    const date = screen.getByTestId("calculator-date");
-    const amount = screen.getByTestId("calculator-amount");
-    const currency = screen.getByTestId("calculator-currency");
-    const clientId = screen.getByTestId("calculator-client-id");
+    const form = screen.getByTestId("calculator-form");
 
-    expect(date).toBeInTheDocument();
-    expect(amount).toBeInTheDocument();
-    expect(currency).toBeInTheDocument();
-    expect(clientId).toBeInTheDocument();
-  });
-
-  it("renders the form submit button", () => {
-    render(
-      <TestWrapper>
-        <Home />
-      </TestWrapper>
-    );
-
-    const button = screen.getByTestId("calculator-button");
-
-    expect(button).toBeInTheDocument();
+    expect(form).toBeInTheDocument();
   });
 });
